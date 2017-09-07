@@ -1,0 +1,6 @@
+#Compiled files and folders
+parsec-original/bin/
+vectorization/bin/
+mpi/bin/
+openmp/bin/
+*.out
