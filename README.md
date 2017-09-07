@@ -9,10 +9,10 @@ The folder structure is as follows:
 -   mpi \[yet to be developed]
 -   OpenMP \[yet to be developed]
 
-#### How to compile ####
+#### Getting started ####
 
-TODO:
-
-#### How to run ####
-
-TODO:
+In order to compile and run the streamcluster, go into the folder which you want to test the optmization, and type
+```
+$ make
+$./run.sh test
+```
