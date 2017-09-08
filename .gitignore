@@ -6,4 +6,3 @@ openmp/bin/
 *.out
 
 # Output
-*.txt

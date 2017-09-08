@@ -16,3 +16,12 @@ In order to compile and run the streamcluster, go into the folder which you want
 $ make
 $./run.sh test
 ```
+
+#### Profiling Analysis ####
+The code is already compiled with the -pg flag, which allows for profiling with Gprof. In order to get the profiling analysis just run `./run.sh <input_option>`, we recommend using the "simlarge" or "native" input option, because the other options are executed in a very small time.
+
+After the code is done executing, a file called `gmon.out` should be created at the same folder. Now, to get human readable information about the software, run the follwing command and the output will be saved at the text file `analysis_gprof.txt`:
+```
+gprof bin/streamcluster.out gmon.out > analysis_gprof.txt
+```
+A few of the folders will contain a README.md file which displays the profiling analysis for the native input.

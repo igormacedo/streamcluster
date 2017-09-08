@@ -2,8 +2,9 @@ TARGET=streamcluster.out
 
 all: src/streamcluster.cpp
 	g++ -O3 \
-		-g \
-	  	-funroll-loops -fprefetch-loop-arrays \
+		-pg \
+	  	-funroll-loops \
+		-fprefetch-loop-arrays \
 		-fpermissive \
 		-fno-exceptions \
 		-static-libgcc \
