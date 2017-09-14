@@ -2,8 +2,19 @@ TARGET=streamcluster.out
 
 all: src/streamcluster.cpp
 	g++ -O3 \
-		-g \
-	  	-funroll-loops -fprefetch-loop-arrays \
+		-std=c99 \
+		-pg \
+		-ftree-vectorize \
+		-fno-tree-slp-vectorize \
+		-fno-tree-loop-distribute-patterns \
+		-ftree-loop-if-convert-stores \
+		-fno-tree-pre \
+		-ftree-vectorizer-verbose=10 \
+		-fopt-info-vec-all \
+		-ffast-math \
+		-march=native \
+	  	-funroll-loops \
+		-fprefetch-loop-arrays \
 		-fpermissive \
 		-fno-exceptions \
 		-static-libgcc \
