@@ -998,6 +998,7 @@ double pgain(long x, Points *points, double z, long int *numcenters, int pid, pt
   */
 
   //original variable
+  // Loop is vectorized witout if
   int count = 0;
   // auxialiry variables for vectorization
   // bool iscenter;
@@ -1009,7 +1010,7 @@ double pgain(long x, Points *points, double z, long int *numcenters, int pid, pt
     center_table[i] = count++;
     }
 
-    // First if-conversion - not vectorized
+    //First if-conversion - not vectorized
     // iscenter = is_center[i];
     // center_table[i] = (is_center[i]? count++: center_table[i]);
 
@@ -1050,10 +1051,18 @@ double pgain(long x, Points *points, double z, long int *numcenters, int pid, pt
   pthread_barrier_wait(barrier);
 #endif
 
+// Loop is vectorized without if
+// Created variable for Loop
+// int work_m = (int)work_mem[pid*stride];
+
   for( int i = k1; i < k2; i++ ) {
     if( is_center[i] ) {
       center_table[i] += (int)work_mem[pid*stride];
     }
+
+    // If-conversion
+    // int j = (int) is_center[i];
+    // center_table[i] += (j ? work_m : 0 );
   }
 
   //now we finish building the table. clear the working memory.

@@ -2,7 +2,7 @@ TARGET=streamcluster.out
 
 all: src/streamcluster.cpp
 	g++ -O3 \
-		-std=c99 \
+		-std=gnu++0x \
 		-pg \
 		-ftree-vectorize \
 		-fno-tree-slp-vectorize \
@@ -12,7 +12,7 @@ all: src/streamcluster.cpp
 		-ftree-vectorizer-verbose=10 \
 		-fopt-info-vec-all \
 		-ffast-math \
-		-march=native \
+		-msse4 \
 	  	-funroll-loops \
 		-fprefetch-loop-arrays \
 		-fpermissive \

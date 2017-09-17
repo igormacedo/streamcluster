@@ -9,6 +9,7 @@ In order to compile for vector processors, some flags should be added to GCC.
 Those flags were already added to the makefile.
 
 #### References ####
+0. <https://twiki.cern.ch/twiki/bin/view/CMSPublic/WorkBookWritingAutovectorizableCode#Which_code_can_be_auto_vectorize>
 1.  Programming Guidelines for Vectorizing C/C++ Compilers. <http://www.drdobbs.com/programming-guidelines-for-vectorizing-c/184401611>. Accessed in 09/09/2017
 2.  <http://www.cac.cornell.edu/education/training/ParallelFall2012/Vectorization.pdf>
 3.  <https://felix.abecassis.me/2012/08/sse-vectorizing-conditional-code/>
