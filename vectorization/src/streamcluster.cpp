@@ -1079,6 +1079,7 @@ double pgain(long x, Points *points, double z, long int *numcenters, int pid, pt
   //global *lower* fields
   double* gl_lower = &work_mem[nproc*stride];
 
+// Erro vectorizing: control flow in loop, bad loop form
   for ( i = k1; i < k2; i++ ) {
     float x_cost = dist(points->p[i], points->p[x], points->dim)
       * points->p[i].weight;
@@ -1118,8 +1119,9 @@ double pgain(long x, Points *points, double z, long int *numcenters, int pid, pt
     if( is_center[i] ) {
       double low = z;
       //aggregate from all threads
+      // vector version will never be profitable.
       for( int p = 0; p < nproc; p++ ) {
-	low += work_mem[center_table[i]+p*stride];
+	     low += work_mem[center_table[i]+p*stride];
       }
       gl_lower[center_table[i]] = low;
       if ( low > 0 ) {

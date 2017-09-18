@@ -3,10 +3,16 @@ In order to compile for vector processors, some flags should be added to GCC.
 -   `-ftree-vectorize`: this flag comes automaticaly when added the optimization `-O3` flag.
 -   `-march=native`: this flag should include the vector processsor architecture flag, which could be any of `-msse -msse2 -msse3 -mssse3 -msse4 -msse4.1 -msse4.2 -mavx`, for example.
 -   `-ftree-vectorizer-verbose`: include this flag to see output that helps debuging vectorized loops. example: `-ftree-vectorizer-verbose=2`
--   `-fopt-info-vec-missed`
+-   `-fopt-info-vec-all`
 -   `-fopt-info-vec-optimized \`
 
 Those flags were already added to the makefile.
+
+#### Attempted vectorization of function pgain() ####
+
+line 1118: not vectorized: control flow in loop.
+line 1121: not vectorized: vector version will never be profitable.
+line 1149: not vectorized: vector version will never be profitable.
 
 #### References ####
 0. <https://twiki.cern.ch/twiki/bin/view/CMSPublic/WorkBookWritingAutovectorizableCode#Which_code_can_be_auto_vectorize>
