@@ -15,7 +15,6 @@
 #include <math.h>
 #include <sys/resource.h>
 #include <limits.h>
-#include <omp.h>
 
 #ifdef ENABLE_THREADS
 #include <pthread.h>
@@ -1010,6 +1009,27 @@ double pgain(long x, Points *points, double z, long int *numcenters, int pid, pt
     if( is_center[i] ) {
     center_table[i] = count++;
     }
+
+    //First if-conversion - not vectorized
+    // iscenter = is_center[i];
+    // center_table[i] = (is_center[i]? count++: center_table[i]);
+
+    // Second if-conversion with no restrictions - not vectorized
+    // int *t, a = 1, *q=&a;
+    // count += (is_center[i]? 1 : 0 );
+    // t = (is_center[i] ? &center_table[i] : q);
+    // *t = count;
+
+    // third if conversion - not vectorized
+    // count += (is_center[i]? 1 : 0 );
+    // int b = center_table[i];
+    // center_table[i] = (is_center[i]? count: b);
+
+    // Deferenced if-conversion - not vectorized
+    // iscenter = is_center[i];
+    // centertable = center_table[i];
+    // center_table[i] = (iscenter? count++: centertable);
+
   }
   work_mem[pid*stride] = count;
 

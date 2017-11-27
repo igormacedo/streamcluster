@@ -1010,6 +1010,7 @@ double pgain(long x, Points *points, double z, long int *numcenters, int pid, pt
     if( is_center[i] ) {
     center_table[i] = count++;
     }
+
   }
   work_mem[pid*stride] = count;
 
@@ -1034,7 +1035,7 @@ double pgain(long x, Points *points, double z, long int *numcenters, int pid, pt
 // Loop is vectorized without if
 // Created variable for Loop
 // int work_m = (int)work_mem[pid*stride];
-
+#pragma omp parallel for
   for( int i = k1; i < k2; i++ ) {
     if( is_center[i] ) {
       center_table[i] += (int)work_mem[pid*stride];
@@ -1060,6 +1061,7 @@ double pgain(long x, Points *points, double z, long int *numcenters, int pid, pt
   double* gl_lower = &work_mem[nproc*stride];
 
 // Erro vectorizing: control flow in loop, bad loop form
+#pragma omp parallel for reduction(+ : cost_of_opening_x)
   for ( i = k1; i < k2; i++ ) {
     float x_cost = dist(points->p[i], points->p[x], points->dim)
       * points->p[i].weight;
@@ -1094,7 +1096,7 @@ double pgain(long x, Points *points, double z, long int *numcenters, int pid, pt
 
   // at this time, we can calculate the cost of opening a center
   // at x; if it is negative, we'll go through with opening it
-
+#pragma omp parallel for
   for ( int i = k1; i < k2; i++ ) {
     if( is_center[i] ) {
       double low = z;
@@ -1139,6 +1141,7 @@ double pgain(long x, Points *points, double z, long int *numcenters, int pid, pt
 
   if ( gl_cost_of_opening_x < 0 ) {
     //  we'd save money by opening x; we'll do it
+    #pragma omp parallel for
     for ( int i = k1; i < k2; i++ ) {
       bool close_center = gl_lower[center_table[points->p[i].assign]] > 0 ;
       if ( switch_membership[i] || close_center ) {
@@ -1250,6 +1253,7 @@ float pFL(Points *points, int *feasible, int numfeasible,
 #ifdef ENABLE_THREADS
     pthread_barrier_wait(barrier);
 #endif
+
     for (i=0;i<iter;i++) {
       x = i%numfeasible;
       change += pgain(feasible[x], points, z, k, pid, barrier);

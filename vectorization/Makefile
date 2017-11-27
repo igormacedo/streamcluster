@@ -12,8 +12,8 @@ all: src/streamcluster.cpp
 		-ftree-vectorizer-verbose=10 \
 		-fopt-info-vec-all \
 		-ffast-math \
-		-msse4 \
-	  	-funroll-loops \
+		-march=native \
+	  -funroll-loops \
 		-fprefetch-loop-arrays \
 		-fpermissive \
 		-fno-exceptions \
