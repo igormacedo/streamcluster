@@ -73,6 +73,7 @@ static bool* is_center; //whether a point is a center
 static int* center_table; //index table of centers
 
 static int nproc; //# of threads
+static int numt; //# of threads
 
 
 #ifdef TBB_VERSION
@@ -1035,7 +1036,7 @@ double pgain(long x, Points *points, double z, long int *numcenters, int pid, pt
 // Loop is vectorized without if
 // Created variable for Loop
 // int work_m = (int)work_mem[pid*stride];
-#pragma omp parallel for num_threads(nproc)
+#pragma omp parallel for num_threads(numt)
   for( int i = k1; i < k2; i++ ) {
     if( is_center[i] ) {
       center_table[i] += (int)work_mem[pid*stride];
@@ -1057,7 +1058,7 @@ double pgain(long x, Points *points, double z, long int *numcenters, int pid, pt
   double* gl_lower = &work_mem[nproc*stride];
 
 // Erro vectorizing: control flow in loop, bad loop form
-#pragma omp parallel for reduction(+ : cost_of_opening_x) num_threads(nproc)
+#pragma omp parallel for reduction(+ : cost_of_opening_x) num_threads(numt)
   for ( i = k1; i < k2; i++ ) {
     float x_cost = dist(points->p[i], points->p[x], points->dim)
       * points->p[i].weight;
@@ -1078,7 +1079,7 @@ double pgain(long x, Points *points, double z, long int *numcenters, int pid, pt
 
   // at this time, we can calculate the cost of opening a center
   // at x; if it is negative, we'll go through with opening it
-#pragma omp parallel for num_threads(nproc)
+#pragma omp parallel for num_threads(numt)
   for ( int i = k1; i < k2; i++ ) {
     if( is_center[i] ) {
       double low = z;
@@ -1117,7 +1118,7 @@ double pgain(long x, Points *points, double z, long int *numcenters, int pid, pt
 
   if ( gl_cost_of_opening_x < 0 ) {
     //  we'd save money by opening x; we'll do it
-    #pragma omp parallel for num_threads(nproc)
+    #pragma omp parallel for num_threads(numt)
     for ( int i = k1; i < k2; i++ ) {
       bool close_center = gl_lower[center_table[points->p[i].assign]] > 0 ;
       if ( switch_membership[i] || close_center ) {
@@ -2003,7 +2004,8 @@ int main(int argc, char **argv)
   clustersize = atoi(argv[6]);
   strcpy(infilename, argv[7]);
   strcpy(outfilename, argv[8]);
-  nproc = atoi(argv[9]);
+  numt = atoi(argv[9]);
+  nproc = 1;
 
 
 #ifdef TBB_VERSION
