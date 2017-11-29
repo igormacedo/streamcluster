@@ -1243,14 +1243,13 @@ float pFL(Points *points, int *feasible, int numfeasible,
 // #endif
 
 #   pragma omp parallel \
-    default(none) firstprivate(points,k) private(i, x) \
+    firstprivate(points,k) private(i, x) \
     shared(iter, numfeasible, feasible, z, pid, barrier)\
     reduction(+: change)
     {
     #   pragma omp for
         for (i=0;i<iter;i++) {
           x = i%numfeasible;
-        //   change += pgain(feasible[x], points, z, k, pid, barrier);
           change += pgain(feasible[x], points, z, k, omp_get_thread_num(), barrier);
         }
     }

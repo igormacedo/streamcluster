@@ -678,7 +678,11 @@ float pkmedian(Points *points, long kmin, long kmax, long* kfinal,
       {
 	break;
       }
+
+
 #pragma omp barrier
+
+
   }
 
   //clean up...
