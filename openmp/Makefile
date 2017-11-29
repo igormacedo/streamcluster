@@ -40,7 +40,6 @@ omp: src/streamclusteromp.cpp
 		-ftree-loop-if-convert-stores \
 		-fno-tree-pre \
 		-ffast-math \
-		-march=native \
 	    -funroll-loops \
 		-fprefetch-loop-arrays \
 		-fpermissive \
